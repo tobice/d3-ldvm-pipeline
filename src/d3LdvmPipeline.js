@@ -6,7 +6,7 @@ import gravity from './gravity.js'
 import LoadingBar from './LoadingBar.js'
 
 // If the alpha value in the force layout gets bellow this value, the layout stops updating and
-// becomes stable
+// becomes stable. These values are part of the force layout and cannot be changed (really?).
 const D3_FORCE_ALPHA_THRESHOLD = 0.005;
 const D3_FORCE_ALPHA_START = 0.1;
 
@@ -15,9 +15,9 @@ export default function d3LdvmPipeline() {
     let height = 700;
 
     let my = selection => selection.each(function (data) {
-        // Note: can't use arrow function here because I need the value of this to contain the
+        // Note: can't use arrow function here because I need the value of 'this' to contain the
         // selected parent DOM node set by D3.js. Arrow functions behave differently as they
-        // automatically take this value from the outside context.
+        // automatically take 'this' value from the outside context.
 
         // Transform input data into our internal format
         let {components, bindings} = transform(data);
@@ -27,7 +27,7 @@ export default function d3LdvmPipeline() {
         let force = initForce();
         let loadingBar = new LoadingBar(D3_FORCE_ALPHA_START, D3_FORCE_ALPHA_THRESHOLD);
 
-        renderLoadingBar();
+        showLoadingBar();
         force.on('end', () => {
             hideLoadingBar();
             render();
@@ -81,7 +81,7 @@ export default function d3LdvmPipeline() {
                 .call(force.drag);
         }
 
-        function renderLoadingBar() {
+        function showLoadingBar() {
             svg.append(() => loadingBar.render())
                 .attr('transform', 'translate(' + width / 2 + ', ' + height / 2 + ')');
         }
