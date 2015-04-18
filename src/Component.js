@@ -12,26 +12,38 @@ export default class Component {
         this.type = type;
         this.inputs = inputs;
         this.outputs = outputs;
-    }
 
-    transform() {
-        return "translate(" + this.x + "," + this.y + ")";
+        this._element = null;
     }
 
     render() {
-        let g = createElement('g')
-            .attr('class', 'component');
+        if (!this._element) {
+            let g = createElement('g')
+                .attr('class', 'component');
 
-        g.append(this.renderLabel.bind(this));
-        g.append(this.renderBody.bind(this));
+            g.style('opacity', 0)
+                .transition()
+                .style('opacity', 1);
 
-        this.inputs.forEach((port) => g.append(this.renderInput.bind(this, port)));
-        this.outputs.forEach((port) => g.append(this.renderOutput.bind(this, port)));
+            g.append(() => this._renderLabel());
+            g.append(() => this._renderBody());
 
-        return g.node();
+            this.inputs.forEach((port) => g.append(() => this._renderInput(port)));
+            this.outputs.forEach((port) => g.append(() => this._renderOutput(port)));
+
+            this._element = g;
+        }
+
+        return this._element.node();
     }
 
-    renderLabel() {
+    update() {
+        if (this._element) {
+            this._element.attr('transform', 'translate(' + this.x + ',' + this.y + ')');
+        }
+    }
+
+    _renderLabel() {
         return createElement('text')
             .text(this.name)
             .attr('x', 0)
@@ -40,7 +52,7 @@ export default class Component {
             .node();
     }
 
-    renderBody() {
+    _renderBody() {
         return createElement('rect')
             .attr('class', 'component-body component-' + this.type)
             .attr('width', SIZE)
@@ -52,15 +64,15 @@ export default class Component {
             .node();
     }
 
-    renderInput(port) {
-        return this.renderPort(this.getInputCoords(port), port);
+    _renderInput(port) {
+        return this._renderPort(this.getInputCoords(port), port);
     }
 
-    renderOutput(port) {
-        return this.renderPort(this.getOutputCoords(port), port);
+    _renderOutput(port) {
+        return this._renderPort(this.getOutputCoords(port), port);
     }
 
-    renderPort(coords, port) {
+    _renderPort(coords, port) {
         return createElement('circle')
             .attr('class', 'component-port')
             .attr('cx', coords.x)

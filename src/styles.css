@@ -1,64 +1,63 @@
-rect {
-    fill-opacity: 0.6;
-    stroke-opacity: 0.8;
-}
-
 .axis path, .axis line {
     stroke-width: 2px;
     stroke: black;
     fill: none;
 }
-
 .link {
     fill: none;
     stroke: #666;
     stroke-width: 1.5px;
 }
-
 #licensing {
     fill: green;
 }
-
 .link.licensing {
     stroke: green;
 }
-
 .link.resolved {
     stroke-dasharray: 0, 2 1;
 }
-
 circle {
     fill: #ccc;
     stroke: #333;
     stroke-width: 1.5px;
 }
-
 text {
-    font: 10px sans-serif;
+    font: 11px sans-serif;
     pointer-events: none;
     text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
 }
-
 .component-body {
     fill-opacity: 1;
     stroke: white;
     stroke-width: 1.5px;
 }
-
 .component-datasource {
     fill: #013C5A;
 }
-
 .component-transformer, .component-analyzer {
     fill: #028E85;
 }
-
 .component-visualizer {
     fill: #02D6A1;
 }
-
 .component-port {
     fill: #4b676f;
     stroke: white;
     stroke-width: 1.5px;
 }
+.loading-bar {
+}
+.loading-bar text {
+    font: 12px sans-serif;
+}
+.loading-bar .outer {
+    fill-opacity: 0;
+    stroke: #4b676f;
+    stroke-width: 1px;
+}
+.loading-bar .inner {
+    fill: #4b676f;
+    fill-opacity: 1;
+}
+
