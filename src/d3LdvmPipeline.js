@@ -4,6 +4,7 @@ import styles from './styles.css'
 import transform from './transform.js'
 import gravity from './gravity.js'
 import LoadingBar from './LoadingBar.js'
+import tooltip from './tooltip.js'
 
 // If the alpha value in the force layout gets bellow this value, the layout stops updating and
 // becomes stable. These values are part of the force layout and cannot be changed (really?).
@@ -27,6 +28,9 @@ export default function d3LdvmPipeline() {
         let force = initForce();
         let loadingBar = new LoadingBar(D3_FORCE_ALPHA_START, D3_FORCE_ALPHA_THRESHOLD);
         let rendered = false;
+
+        // Init tooltip
+        DOMElement.append(() => tooltip.render());
 
         // We wait until the layout stabilizes for the first time (the event 'end' is fired) and
         // only then we display the visualization. It saves up some CPU time and results in way

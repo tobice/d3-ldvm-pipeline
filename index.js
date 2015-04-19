@@ -2,7 +2,7 @@ import d3 from 'd3'
 import d3LdvmPipeline from './src/d3LdvmPipeline.js'
 import generate from './src/generate.js'
 
-const COMPONENTS_COUNT = 10;
+const COMPONENTS_COUNT = 2;
 const VISUALIZERS_COUNT = 1;
 const WIDTH = 1800;
 const HEIGHT = 700;

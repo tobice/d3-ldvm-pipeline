@@ -44,7 +44,7 @@ function component(type) {
         id: _id,
         uri: componentUri(_id),
         label: label(),
-        htmlContent: '',
+        htmlContent: 'Some <strong>html</strong> content',
         type: type || (randomInt(1) ? ANALYZER : TRANSFORMER),
         inputs: inputs(),
         outputs: outputs()

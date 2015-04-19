@@ -1,5 +1,6 @@
 import d3 from 'd3'
-import {createElement} from './misc.js'
+import tooltip from './tooltip.js'
+import {createElement, realPosition} from './misc.js'
 
 const SIZE = 70;
 const PORT_SIZE = 10;
@@ -7,9 +8,11 @@ const BORDER_RADIUS = 8;
 
 export default class Component {
 
-    constructor(name, type, inputs, outputs) {
+    constructor(name, type, uri, htmlContent, inputs, outputs) {
         this.name = name;
         this.type = type;
+        this.uri = uri;
+        this.htmlContent = htmlContent;
         this.inputs = inputs;
         this.outputs = outputs;
 
@@ -61,6 +64,14 @@ export default class Component {
             .attr('y', -SIZE/2)
             .attr('rx', BORDER_RADIUS)
             .attr('ry', BORDER_RADIUS)
+            .on('mouseover', () => tooltip
+                .label(this.name)
+                .uri(this.uri)
+                .content(this.htmlContent)
+                .x(realPosition(this._element).x)
+                .y(realPosition(this._element).y + SIZE)
+                .show())
+            .on('mouseout', () => tooltip.hide())
             .node();
     }
 
@@ -78,6 +89,14 @@ export default class Component {
             .attr('cx', coords.x)
             .attr('cy', coords.y)
             .attr('r', PORT_SIZE / 2)
+            .on('mouseover', () => tooltip
+                .label(port.label)
+                .uri(port.uri)
+                .content('')
+                .x(d3.event.pageX)
+                .y(d3.event.pageY)
+                .show())
+            .on('mouseout', () => tooltip.hide())
             .node();
     }
 

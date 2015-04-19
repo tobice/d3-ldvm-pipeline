@@ -61,3 +61,25 @@ text {
     fill-opacity: 1;
 }
 
+/** Tooltip */
+.ldvm-tooltip {
+    max-width: 300px;
+    position: absolute;
+    font: 12px sans-serif;
+    border: 1px solid #6e97a3;
+    border-radius: 4px;
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: white 0 0 1px, white 0 0 1px;
+}
+.ldvm-tooltip div {
+    padding: 5px;
+}
+.ldvm-tooltip-label {
+    font-weight: bold;
+    background-color: rgba(2, 142, 133, 0.8);
+    color: white;
+}
+.ldvm-tooltip-uri {
+    color: #013C5A;
+}
