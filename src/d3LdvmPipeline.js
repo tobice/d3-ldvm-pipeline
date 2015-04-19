@@ -55,6 +55,7 @@ export default function d3LdvmPipeline() {
                 .size([width, height])
                 .linkDistance(200)
                 .charge(-600)
+                .gravity(0.1)
                 .on('tick', tick);
         }
 

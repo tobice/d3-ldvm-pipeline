@@ -2,12 +2,14 @@ import d3 from 'd3'
 import {createElement} from './misc.js'
 
 export default class Binding {
-    constructor(source, sourceUri, target, targetUri, type) {
-        this.source = source;
-        this.sourceUri = sourceUri;
-        this.target = target;
-        this.targetUri = targetUri;
+    constructor(sourcePort, targetPort, type) {
+        this.sourcePort = sourcePort;
+        this.targetPort = targetPort;
         this.type = type;
+
+        this.source = sourcePort.component;
+        this.target = targetPort.component;
+        this.rank = targetPort.rank;
 
         this._element = null;
     }
@@ -24,8 +26,8 @@ export default class Binding {
     update() {
         if (this._element) {
             // Get the port coordinates relative to the component
-            let sourcePort = this.source.getPortCoords(this.sourceUri),
-                targetPort = this.target.getPortCoords(this.targetUri);
+            let sourcePort = this.source.getPortCoords(this.sourcePort.uri),
+                targetPort = this.target.getPortCoords(this.targetPort.uri);
 
             // Calculate the final real coordinates of target and source by combining the component
             // position and the relative port position
