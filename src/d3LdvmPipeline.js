@@ -26,12 +26,19 @@ export default function d3LdvmPipeline() {
         let svg = initSvg();
         let force = initForce();
         let loadingBar = new LoadingBar(D3_FORCE_ALPHA_START, D3_FORCE_ALPHA_THRESHOLD);
+        let rendered = false;
 
+        // We wait until the layout stabilizes for the first time (the event 'end' is fired) and
+        // only then we display the visualization. It saves up some CPU time and results in way
+        // smoother user experience.
         showLoadingBar();
         force.on('end', () => {
-            hideLoadingBar();
-            render();
-            update();
+            if (!rendered) {
+                hideLoadingBar();
+                render();
+                update();
+                rendered = true;
+            }
         });
         force.start();
 

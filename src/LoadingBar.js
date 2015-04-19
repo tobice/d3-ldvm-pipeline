@@ -36,12 +36,14 @@ export default class LoadingBar {
     }
 
     remove() {
-        this._element.transition()
-            .style('opacity', 0)
-            .each('end', () => {
-                this._element.remove();
-                this._element = null;
-            });
+        if (this._element) {
+            this._element.transition()
+                .style('opacity', 0)
+                .each('end', () => {
+                    this._element.remove();
+                    this._element = null;
+                });
+        }
     }
 
     _renderLabel() {
