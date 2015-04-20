@@ -7,10 +7,13 @@ module.exports = extend(common, {
     output: {
         path: __dirname + '/../dist/',
         filename: 'd3LdvmPipeline.min.js',
-        libraryTarget: 'var',
+        libraryTarget: 'umd',
         library: 'd3LdvmPipeline'
     },
     plugins: [
         new optimize.UglifyJsPlugin()
-    ]
+    ],
+    externals: {
+        'd3': 'd3'
+    }
 });
