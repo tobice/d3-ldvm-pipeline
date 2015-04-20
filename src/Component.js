@@ -8,11 +8,8 @@ const BORDER_RADIUS = 8;
 
 export default class Component {
 
-    constructor(name, type, uri, htmlContent, inputs, outputs) {
-        this.name = name;
-        this.type = type;
-        this.uri = uri;
-        this.htmlContent = htmlContent;
+    constructor(data, inputs, outputs) {
+        this.data = data;
         this.inputs = inputs;
         this.outputs = outputs;
 
@@ -48,7 +45,7 @@ export default class Component {
 
     _renderLabel() {
         return createElement('text')
-            .text(this.name)
+            .text(this.data.label)
             .attr('x', 0)
             .attr('y', SIZE / 2 + 10)
             .attr('text-anchor', 'middle')
@@ -57,7 +54,7 @@ export default class Component {
 
     _renderBody() {
         return createElement('rect')
-            .attr('class', 'component-body component-' + this.type)
+            .attr('class', 'component-body component-' + this.data.type)
             .attr('width', SIZE)
             .attr('height', SIZE)
             .attr('x', -SIZE/2)
@@ -65,9 +62,9 @@ export default class Component {
             .attr('rx', BORDER_RADIUS)
             .attr('ry', BORDER_RADIUS)
             .on('mouseover', () => tooltip
-                .label(this.name)
-                .uri(this.uri)
-                .content(this.htmlContent)
+                .label(this.data.label)
+                .uri(this.data.uri)
+                .content(this.data.htmlContent)
                 .x(realPosition(this._element).x)
                 .y(realPosition(this._element).y + SIZE)
                 .show())
@@ -76,11 +73,11 @@ export default class Component {
     }
 
     _renderInput(port) {
-        return this._renderPort(this.getInputCoords(port), port);
+        return this._renderPort(this._getInputCoords(port), port);
     }
 
     _renderOutput(port) {
-        return this._renderPort(this.getOutputCoords(port), port);
+        return this._renderPort(this._getOutputCoords(port), port);
     }
 
     _renderPort(coords, port) {
@@ -100,37 +97,37 @@ export default class Component {
             .node();
     }
 
-    getInputCoords(input) {
+    _getInputCoords(input) {
         return {
             x: -SIZE / 2,
-            y: this.getPortY(this.inputs.indexOf(input), this.inputs.length)
+            y: this._getPortY(this.inputs.indexOf(input), this.inputs.length)
         }
     }
 
-    getOutputCoords(output) {
+    _getOutputCoords(output) {
         return {
             x: SIZE / 2,
-            y: this.getPortY(this.outputs.indexOf(output), this.outputs.length)
+            y: this._getPortY(this.outputs.indexOf(output), this.outputs.length)
         }
     }
 
-    getPortY(i, count) {
+    _getPortY(i, count) {
         let p = SIZE / count;
         return (-SIZE/2) + i * p + p / 2;
     }
 
     getPortCoords(uri) {
         let port;
-        if (port = this.findPortByUri(this.inputs, uri)) {
-            return this.getInputCoords(port);
-        } else if (port = this.findPortByUri(this.outputs, uri)) {
-            return this.getOutputCoords(port);
+        if (port = this._findPortByUri(this.inputs, uri)) {
+            return this._getInputCoords(port);
+        } else if (port = this._findPortByUri(this.outputs, uri)) {
+            return this._getOutputCoords(port);
         } else {
             throw new Error('Port does not exist: ' + uri);
         }
     }
 
-    findPortByUri(ports, uri) {
+    _findPortByUri(ports, uri) {
         let result = ports.filter(port => port.uri == uri);
         return result.length > 0 ? result[0] : false;
     }

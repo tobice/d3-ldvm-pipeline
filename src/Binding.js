@@ -2,13 +2,15 @@ import d3 from 'd3'
 import {createElement} from './misc.js'
 
 export default class Binding {
-    constructor(sourcePort, targetPort, type) {
+    constructor(data, sourcePort, targetPort) {
+        this.data = data;
         this.sourcePort = sourcePort;
         this.targetPort = targetPort;
-        this.type = type;
 
+        // Required for the d3.force layout
         this.source = sourcePort.component;
         this.target = targetPort.component;
+
         this.rank = targetPort.rank;
 
         this._element = null;
@@ -17,8 +19,8 @@ export default class Binding {
     render() {
         if (!this._element) {
             this._element = createElement('path')
-                .attr('class', 'link ' + this.type)
-                .attr('marker-end', 'url(#' + this.type + ')');
+                .attr('class', 'link ' + this.data.type)
+                .attr('marker-end', 'url(#' + this.data.type + ')');
         }
         return this._element.node();
     }

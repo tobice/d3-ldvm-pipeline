@@ -6,7 +6,7 @@ export default function transform(data) {
     let ports = {};
 
     let components = data.components.map(c => {
-        let component = new Component(c.label, c.type, c.uri, c.htmlContent, c.inputs, c.outputs);
+        let component = new Component(c, c.inputs, c.outputs);
 
         // Remember to which component each port belongs
         c.inputs.forEach((port, i) => {
@@ -24,7 +24,7 @@ export default function transform(data) {
     });
 
     let bindings = data.bindings.map(b =>
-        new Binding(ports[b.sourceUri], ports[b.targetUri], 'resolved'));
+        new Binding(b, ports[b.sourceUri], ports[b.targetUri]));
 
     return {components: components, bindings: bindings};
 }

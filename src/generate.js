@@ -56,7 +56,8 @@ function binding(source, target) {
         sourceId: source.id,
         targetId: target.id,
         sourceUri: source.uri,
-        targetUri: target.uri
+        targetUri: target.uri,
+        type: 'resolved'
     }
 }
 
