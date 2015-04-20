@@ -15,6 +15,7 @@ export default function d3LdvmPipeline() {
     let width = 1800;
     let height = 700;
     let componentSize = 70;
+    let configureForce = force => force;
 
     let my = selection => selection.each(function (data) {
         // Note: can't use arrow function here because I need the value of 'this' to contain the
@@ -55,7 +56,7 @@ export default function d3LdvmPipeline() {
         }
 
         function initForce() {
-            return d3.layout.force()
+            let force = d3.layout.force()
                 .nodes(components)
                 .links(bindings)
                 .size([width, height])
@@ -63,6 +64,10 @@ export default function d3LdvmPipeline() {
                 .charge(-600)
                 .gravity(0.1)
                 .on('tick', tick);
+
+            // Apply user configuration from the outside
+            force = configureForce(force);
+            return force;
         }
 
         function render() {
@@ -124,6 +129,7 @@ export default function d3LdvmPipeline() {
     my.width = value => (value === undefined) ? width : _(width = value);
     my.height = value => (value === undefined) ? height : _(height = value);
     my.componentSize = value => (value === undefined) ? componentSize : _(componentSize = value);
+    my.configureForce = value => (value === undefined) ? configureForce : _(configureForce = value);
 
     return my;
 }

@@ -13,7 +13,8 @@ const data = generate(COMPONENTS_COUNT, VISUALIZERS_COUNT);
 let pipeline = d3LdvmPipeline()
     .width(WIDTH)
     .height(HEIGHT)
-    .componentSize(COMPONENT_SIZE);
+    .componentSize(COMPONENT_SIZE)
+    .configureForce(force => force.gravity(0.2));
 
 d3.select("body")
     .datum(data)
