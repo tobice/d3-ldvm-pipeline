@@ -19,7 +19,7 @@ export default class Component {
     render() {
         if (!this._element) {
             let g = createElement('g')
-                .attr('class', 'component');
+                .attr('class', 'ldvm-component');
 
             g.style('opacity', 0)
                 .transition()
@@ -46,6 +46,7 @@ export default class Component {
     _renderLabel() {
         return createElement('text')
             .text(this.data.label)
+            .attr('class', 'ldvm-component-label')
             .attr('x', 0)
             .attr('y', SIZE / 2 + 10)
             .attr('text-anchor', 'middle')
@@ -54,7 +55,7 @@ export default class Component {
 
     _renderBody() {
         return createElement('rect')
-            .attr('class', 'component-body component-' + this.data.type)
+            .attr('class', 'ldvm-component-body ldvm-component-' + this.data.type)
             .attr('width', SIZE)
             .attr('height', SIZE)
             .attr('x', -SIZE/2)
@@ -82,7 +83,7 @@ export default class Component {
 
     _renderPort(coords, port) {
         return createElement('circle')
-            .attr('class', 'component-port')
+            .attr('class', 'ldvm-component-port')
             .attr('cx', coords.x)
             .attr('cy', coords.y)
             .attr('r', PORT_SIZE / 2)

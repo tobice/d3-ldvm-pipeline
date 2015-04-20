@@ -48,6 +48,7 @@ export default function d3LdvmPipeline() {
 
         function initSvg() {
             return DOMElement.append('svg')
+                .attr('class', 'ldvmě')
                 .attr('width', width)
                 .attr('height', height);
         }
@@ -86,7 +87,7 @@ export default function d3LdvmPipeline() {
                 .append(binding => binding.render());
 
             svg.append('g')
-                .selectAll('.component')
+                .selectAll('.ldvm-component')
                 .data(force.nodes())
                 .enter()
                 .append(component => component.render())

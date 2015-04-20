@@ -16,7 +16,7 @@ export default class LoadingBar {
 
     render() {
         if (!this._element) {
-            let g = createElement('g').attr('class', 'loading-bar');
+            let g = createElement('g').attr('class', 'ldvm-loading-bar');
 
             g.append(() => this._renderBar());
             g.append(() => this._renderLabel());
@@ -30,7 +30,7 @@ export default class LoadingBar {
         if (this._element) {
             this._element.select('text')
                 .text('Loading visualization...' + this._getProgressPercentage() + '%');
-            this._element.select('.inner')
+            this._element.select('.ldvm-inner')
                 .attr('width', this._getBarWidth());
         }
     }
@@ -60,7 +60,7 @@ export default class LoadingBar {
         let g = createElement('g');
 
         g.append('rect')
-            .attr('class', 'outer')
+            .attr('class', 'ldvm-outer')
             .attr('width', WIDTH)
             .attr('height', HEIGHT)
             .attr('x', -WIDTH / 2)
@@ -69,7 +69,7 @@ export default class LoadingBar {
             .attr('ry', BORDER_RADIUS);
 
         g.append('rect')
-            .attr('class', 'inner')
+            .attr('class', 'ldvm-inner')
             .attr('width', this._getBarWidth())
             .attr('height', HEIGHT)
             .attr('x', -WIDTH / 2)

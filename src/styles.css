@@ -1,62 +1,55 @@
-.axis path, .axis line {
-    stroke-width: 2px;
-    stroke: black;
-    fill: none;
-}
-.link {
-    fill: none;
-    stroke: #666;
-    stroke-width: 1.5px;
-}
-#licensing {
-    fill: green;
-}
-.link.licensing {
-    stroke: green;
-}
-.link.resolved {
-    stroke-dasharray: 0, 2 1;
-}
-circle {
-    fill: #ccc;
-    stroke: #333;
-    stroke-width: 1.5px;
-}
-text {
-    font: 11px sans-serif;
-    pointer-events: none;
-    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
-}
-.component-body {
+/** Components */
+.ldvm-component-body {
     fill-opacity: 1;
     stroke: white;
     stroke-width: 1.5px;
 }
-.component-datasource {
+.ldvm-component-label {
+    font: 11px sans-serif;
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+.ldvm-component-datasource {
     fill: #013C5A;
 }
-.component-transformer, .component-analyzer {
+.ldvm-component-transformer, .ldvm-component-analyzer {
     fill: #028E85;
 }
-.component-visualizer {
+.ldvm-component-visualizer {
     fill: #02D6A1;
 }
-.component-port {
+.ldvm-component-port {
     fill: #4b676f;
     stroke: white;
     stroke-width: 1.5px;
 }
-.loading-bar {
+
+/** Bindings */
+.ldvm-link {
+    fill: none;
+    stroke: #666;
+    stroke-width: 1.5px;
 }
-.loading-bar text {
+.ldvm-link.ldvm-licensing {
+    stroke: green;
+}
+.ldvm-link.ldvm-resolved {
+    stroke-dasharray: 0, 2 1;
+}
+
+/** Loading bar */
+.ldvm-loading-bar {
+}
+.ldvm-loading-bar text {
     font: 12px sans-serif;
+    text-shadow: 0 1px 1px #fff, 1px 0 1px #fff, 0 -1px 1px #fff, -1px 0 1px #fff;
 }
-.loading-bar .outer {
+.ldvm-loading-bar .ldvm-outer {
     fill-opacity: 0;
     stroke: #4b676f;
     stroke-width: 1px;
 }
-.loading-bar .inner {
+.ldvm-loading-bar .ldvm-inner {
     fill: #4b676f;
     fill-opacity: 1;
 }

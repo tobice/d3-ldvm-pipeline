@@ -19,7 +19,7 @@ export default class Binding {
     render() {
         if (!this._element) {
             this._element = createElement('path')
-                .attr('class', 'link ' + this.data.type)
+                .attr('class', 'ldvm-link ldvm-' + this.data.type)
                 .attr('marker-end', 'url(#' + this.data.type + ')');
         }
         return this._element.node();
