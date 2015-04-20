@@ -4,6 +4,7 @@ import styles from './styles.css'
 import transform from './transform.js'
 import gravity from './gravity.js'
 import LoadingBar from './LoadingBar.js'
+import Marker from './Marker.js'
 import tooltip from './tooltip.js'
 
 // If the alpha value in the force layout gets bellow this value, the layout stops updating and
@@ -15,6 +16,7 @@ export default function d3LdvmPipeline() {
     let width = 1800;
     let height = 700;
     let componentSize = 70;
+    let componentTypes = ['suit', 'licensing', 'resolved'];
     let configureForce = force => force;
 
     let my = selection => selection.each(function (data) {
@@ -29,6 +31,7 @@ export default function d3LdvmPipeline() {
         let svg = initSvg();
         let force = initForce();
         let loadingBar = new LoadingBar(D3_FORCE_ALPHA_START, D3_FORCE_ALPHA_THRESHOLD);
+        let markers = componentTypes.map(type => new Marker(componentSize / 10, type));
         let rendered = false;
 
         // Init tooltip
@@ -73,20 +76,10 @@ export default function d3LdvmPipeline() {
         function render() {
             components.forEach(component => component.size(componentSize));
 
-            // Per-type markers, as they don't inherit styles.
             svg.append('defs').selectAll('marker')
-                .data(['suit', 'licensing', 'resolved'])
-                .enter().append('marker')
-                .attr('id', d => d)
-                .attr('viewBox', '0 -5 10 10')
-                .attr('refX', 15)
-                .attr('refY', -1.5)
-                .attr('markerWidth', componentSize / 10)
-                .attr('markerHeight', componentSize / 10)
-                .attr('orient', 'auto')
-                .append('path')
-                .attr('d', 'M0,-5L10,0L0,5');
-
+                .data(markers)
+                .enter()
+                .append(marker => marker.render());
 
             svg.append('g')
                 .selectAll('path')
@@ -129,6 +122,7 @@ export default function d3LdvmPipeline() {
     my.width = value => (value === undefined) ? width : _(width = value);
     my.height = value => (value === undefined) ? height : _(height = value);
     my.componentSize = value => (value === undefined) ? componentSize : _(componentSize = value);
+    my.componentTypes = value => (value === undefined) ? componentTypes : _(componentTypes = value);
     my.configureForce = value => (value === undefined) ? configureForce : _(configureForce = value);
 
     return my;

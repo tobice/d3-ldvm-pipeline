@@ -7,6 +7,7 @@ const VISUALIZERS_COUNT = 1;
 const WIDTH = 1800;
 const HEIGHT = 700;
 const COMPONENT_SIZE = 70;
+const COMPONENT_TYPES = ['suit', 'licensing', 'resolved'];
 
 const data = generate(COMPONENTS_COUNT, VISUALIZERS_COUNT);
 
@@ -14,6 +15,7 @@ let pipeline = d3LdvmPipeline()
     .width(WIDTH)
     .height(HEIGHT)
     .componentSize(COMPONENT_SIZE)
+    .componentTypes(COMPONENT_TYPES)
     .configureForce(force => force.gravity(0.2));
 
 d3.select("body")
