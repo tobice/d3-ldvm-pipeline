@@ -2,20 +2,19 @@ import loremIpsum from 'lorem-ipsum'
 import {VISUALIZER, TRANSFORMER, DATASOURCE, ANALYZER} from './consts.js'
 
 /** Generates random LDVM pipeline. */
-export default function generate(componentsCount, visualizersCount) {
+export default function generate(componentsCount, visualizersCount, maxInputs, maxOutputs) {
     let components = [],  bindings = [], inputs = [];
 
     // Create visualizers
     seq(visualizersCount).forEach(() => {
-        let v = component(VISUALIZER);
-        v.outputs = [];
+        let v = component(VISUALIZER, maxInputs, 0);
         inputs = inputs.concat(v.inputs);
         components.push(v);
     });
 
     // Create inner components
     seq(componentsCount).forEach(() => {
-        let c = component();
+        let c = component(null, maxInputs, maxOutputs);
         c.outputs.forEach(output => {
             if (inputs.length > 0) {
                 bindings.push(binding(output, inputs.shift()));
@@ -38,7 +37,7 @@ export default function generate(componentsCount, visualizersCount) {
     return {components: components, bindings: bindings};
 }
 
-function component(type) {
+function component(type, maxInputs, maxOutputs) {
     let _id = id();
     return {
         id: _id,
@@ -46,8 +45,8 @@ function component(type) {
         label: label(),
         htmlContent: 'Some <strong>html</strong> content',
         type: type || (randomInt(1) ? ANALYZER : TRANSFORMER),
-        inputs: inputs(),
-        outputs: outputs()
+        inputs: inputs(maxInputs),
+        outputs: outputs(maxOutputs)
     }
 }
 
@@ -77,12 +76,12 @@ function portUri(id) {
     return 'http://payola.viz/#port' + id;
 }
 
-function inputs() {
-    return randomSeq(3).map(port);
+function inputs(max) {
+    return randomSeq(max).map(port);
 }
 
-function outputs() {
-    return randomSeq(1).map(port);
+function outputs(max) {
+    return randomSeq(max).map(port);
 }
 
 function port() {
@@ -99,10 +98,13 @@ function randomInt(max) {
 }
 
 function seq(length) {
+    if (!length) return [];
     return Array.apply(0, new Array(length)).map((_, i) => i);
 }
 
 function randomSeq(maxLength) {
+    if (!maxLength) return [];
+    // To make sure it's always at least one
     return seq(randomInt(maxLength - 1) + 1);
 }
 
