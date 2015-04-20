@@ -14,6 +14,7 @@ const D3_FORCE_ALPHA_START = 0.1;
 export default function d3LdvmPipeline() {
     let width = 1800;
     let height = 700;
+    let componentSize = 70;
 
     let my = selection => selection.each(function (data) {
         // Note: can't use arrow function here because I need the value of 'this' to contain the
@@ -58,13 +59,15 @@ export default function d3LdvmPipeline() {
                 .nodes(components)
                 .links(bindings)
                 .size([width, height])
-                .linkDistance(200)
+                .linkDistance(3 * componentSize)
                 .charge(-600)
                 .gravity(0.1)
                 .on('tick', tick);
         }
 
         function render() {
+            components.forEach(component => component.size(componentSize));
+
             // Per-type markers, as they don't inherit styles.
             svg.append('defs').selectAll('marker')
                 .data(['suit', 'licensing', 'resolved'])
@@ -73,8 +76,8 @@ export default function d3LdvmPipeline() {
                 .attr('viewBox', '0 -5 10 10')
                 .attr('refX', 15)
                 .attr('refY', -1.5)
-                .attr('markerWidth', 6)
-                .attr('markerHeight', 6)
+                .attr('markerWidth', componentSize / 10)
+                .attr('markerHeight', componentSize / 10)
                 .attr('orient', 'auto')
                 .append('path')
                 .attr('d', 'M0,-5L10,0L0,5');
@@ -120,6 +123,7 @@ export default function d3LdvmPipeline() {
     let _ = () => my;
     my.width = value => (value === undefined) ? width : _(width = value);
     my.height = value => (value === undefined) ? height : _(height = value);
+    my.componentSize = value => (value === undefined) ? componentSize : _(componentSize = value);
 
     return my;
 }

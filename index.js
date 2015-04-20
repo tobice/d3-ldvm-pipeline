@@ -6,12 +6,14 @@ const COMPONENTS_COUNT = 2;
 const VISUALIZERS_COUNT = 1;
 const WIDTH = 1800;
 const HEIGHT = 700;
+const COMPONENT_SIZE = 70;
 
 const data = generate(COMPONENTS_COUNT, VISUALIZERS_COUNT);
 
 let pipeline = d3LdvmPipeline()
     .width(WIDTH)
-    .height(HEIGHT);
+    .height(HEIGHT)
+    .componentSize(COMPONENT_SIZE);
 
 d3.select("body")
     .datum(data)

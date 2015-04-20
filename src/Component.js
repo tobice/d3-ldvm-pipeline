@@ -2,8 +2,6 @@ import d3 from 'd3'
 import tooltip from './tooltip.js'
 import {createElement, realPosition} from './misc.js'
 
-const SIZE = 70;
-const PORT_SIZE = 10;
 const BORDER_RADIUS = 8;
 
 export default class Component {
@@ -13,6 +11,7 @@ export default class Component {
         this.inputs = inputs;
         this.outputs = outputs;
 
+        this._size = 70;
         this._element = null;
     }
 
@@ -43,12 +42,18 @@ export default class Component {
         }
     }
 
+    size(value) {
+        if (value === undefined) return this._size;
+        this._size = value;
+        return this;
+    }
+
     _renderLabel() {
         return createElement('text')
             .text(this.data.label)
             .attr('class', 'ldvm-component-label')
             .attr('x', 0)
-            .attr('y', SIZE / 2 + 10)
+            .attr('y', this._size / 2 + 10)
             .attr('text-anchor', 'middle')
             .node();
     }
@@ -56,10 +61,10 @@ export default class Component {
     _renderBody() {
         return createElement('rect')
             .attr('class', 'ldvm-component-body ldvm-component-' + this.data.type)
-            .attr('width', SIZE)
-            .attr('height', SIZE)
-            .attr('x', -SIZE/2)
-            .attr('y', -SIZE/2)
+            .attr('width', this._size)
+            .attr('height', this._size)
+            .attr('x', -this._size/2)
+            .attr('y', -this._size/2)
             .attr('rx', BORDER_RADIUS)
             .attr('ry', BORDER_RADIUS)
             .on('mouseover', () => tooltip
@@ -67,7 +72,7 @@ export default class Component {
                 .uri(this.data.uri)
                 .content(this.data.htmlContent)
                 .x(realPosition(this._element).x)
-                .y(realPosition(this._element).y + SIZE)
+                .y(realPosition(this._element).y + this._size)
                 .show())
             .on('mouseout', () => tooltip.hide())
             .node();
@@ -86,7 +91,7 @@ export default class Component {
             .attr('class', 'ldvm-component-port')
             .attr('cx', coords.x)
             .attr('cy', coords.y)
-            .attr('r', PORT_SIZE / 2)
+            .attr('r', this._getPortSize() / 2)
             .on('mouseover', () => tooltip
                 .label(port.label)
                 .uri(port.uri)
@@ -100,21 +105,25 @@ export default class Component {
 
     _getInputCoords(input) {
         return {
-            x: -SIZE / 2,
+            x: -this._size / 2,
             y: this._getPortY(this.inputs.indexOf(input), this.inputs.length)
         }
     }
 
     _getOutputCoords(output) {
         return {
-            x: SIZE / 2,
+            x: this._size / 2,
             y: this._getPortY(this.outputs.indexOf(output), this.outputs.length)
         }
     }
 
     _getPortY(i, count) {
-        let p = SIZE / count;
-        return (-SIZE/2) + i * p + p / 2;
+        let p = this._size / count;
+        return (-this._size/2) + i * p + p / 2;
+    }
+
+    _getPortSize() {
+        return this._size / 6;
     }
 
     getPortCoords(uri) {
