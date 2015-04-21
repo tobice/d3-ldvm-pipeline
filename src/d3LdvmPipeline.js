@@ -2,22 +2,16 @@ import d3 from 'd3'
 
 import styles from './styles.css'
 import transform from './transform.js'
-import gravity from './gravity.js'
-import LoadingBar from './LoadingBar.js'
 import Marker from './Marker.js'
 import tooltip from './tooltip.js'
-
-// If the alpha value in the force layout gets bellow this value, the layout stops updating and
-// becomes stable. These values are part of the force layout and cannot be changed (really?).
-const D3_FORCE_ALPHA_THRESHOLD = 0.005;
-const D3_FORCE_ALPHA_START = 0.1;
+import makeTree from './makeTree.js'
+import treeLayout from './treeLayout.js'
 
 export default function d3LdvmPipeline() {
     let width = 1800;
     let height = 700;
     let componentSize = 70;
     let componentTypes = ['suit', 'licensing', 'resolved'];
-    let configureForce = force => force;
 
     let my = selection => selection.each(function (data) {
         // Note: can't use arrow function here because I need the value of 'this' to contain the
@@ -29,48 +23,29 @@ export default function d3LdvmPipeline() {
 
         let DOMElement = d3.select(this);
         let svg = initSvg();
-        let force = initForce();
-        let loadingBar = new LoadingBar(D3_FORCE_ALPHA_START, D3_FORCE_ALPHA_THRESHOLD);
         let markers = componentTypes.map(type => new Marker(componentSize / 10, type));
-        let rendered = false;
 
         // Init tooltip
         DOMElement.append(() => tooltip.render());
 
-        // We wait until the layout stabilizes for the first time (the event 'end' is fired) and
-        // only then we display the visualization. It saves up some CPU time and results in way
-        // smoother user experience.
-        showLoadingBar();
-        force.on('end', () => {
-            if (!rendered) {
-                hideLoadingBar();
-                render();
-                update();
-                rendered = true;
-            }
-        });
-        force.start();
+        makeLayout();
+        render();
+        update();
 
         function initSvg() {
             return DOMElement.append('svg')
-                .attr('class', 'ldvmě')
+                .attr('class', 'ldvm')
                 .attr('width', width)
                 .attr('height', height);
         }
 
-        function initForce() {
-            let force = d3.layout.force()
-                .nodes(components)
-                .links(bindings)
-                .size([width, height])
-                .linkDistance(3 * componentSize)
-                .charge(-600)
-                .gravity(0.1)
-                .on('tick', tick);
-
-            // Apply user configuration from the outside
-            force = configureForce(force);
-            return force;
+        function makeLayout() {
+            let tree = makeTree(components, bindings);
+            treeLayout()
+                .width(width)
+                .height(height)
+                .nodeSize(componentSize)
+                .run(tree);
         }
 
         function render() {
@@ -83,37 +58,20 @@ export default function d3LdvmPipeline() {
 
             svg.append('g')
                 .selectAll('path')
-                .data(force.links())
+                .data(bindings)
                 .enter()
                 .append(binding => binding.render());
 
             svg.append('g')
                 .selectAll('.ldvm-component')
-                .data(force.nodes())
+                .data(components)
                 .enter()
-                .append(component => component.render())
-                .call(force.drag);
-        }
-
-        function showLoadingBar() {
-            svg.append(() => loadingBar.render())
-                .attr('transform', 'translate(' + width / 2 + ', ' + height / 2 + ')');
-        }
-
-        function hideLoadingBar() {
-            loadingBar.remove();
+                .append(component => component.render());
         }
 
         function update() {
             components.forEach(component => component.update());
             bindings.forEach(binding => binding.update());
-            loadingBar.update();
-        }
-
-        function tick(e) {
-            loadingBar.alpha = e.alpha;
-            gravity(e.alpha, components, bindings);
-            update();
         }
     });
 
@@ -121,9 +79,8 @@ export default function d3LdvmPipeline() {
     let _ = () => my;
     my.width = value => (value === undefined) ? width : _(width = value);
     my.height = value => (value === undefined) ? height : _(height = value);
-    my.componentSize = value => (value === undefined) ? componentSize : _(componentSize = value);
+    my.nodeSize = value => (value === undefined) ? componentSize : _(componentSize = value);
     my.componentTypes = value => (value === undefined) ? componentTypes : _(componentTypes = value);
-    my.configureForce = value => (value === undefined) ? configureForce : _(configureForce = value);
 
     return my;
 }

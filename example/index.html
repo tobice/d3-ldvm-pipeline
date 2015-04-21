@@ -13,10 +13,7 @@
 	var pipeline = d3LdvmPipeline()
 		.width(1000)
 		.height(700)
-		.componentSize(40)
-		.configureForce(function (force) {
-			return force.gravity(0.2)
-		});
+		.nodeSize(70);
 
 	d3.select("body").datum(data).call(pipeline);
 </script>

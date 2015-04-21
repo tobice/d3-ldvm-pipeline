@@ -48,6 +48,10 @@ export default class Component {
         return this;
     }
 
+    type() {
+        return this.data.type;
+    }
+
     _renderLabel() {
         return createElement('text')
             .text(this.data.label)
