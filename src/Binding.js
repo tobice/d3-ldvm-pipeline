@@ -18,7 +18,7 @@ export default class Binding {
 
     render() {
         if (!this._element) {
-            this._element = createElement('path')
+            this._element = createElement('line')
                 .attr('class', 'ldvm-link ldvm-' + this.data.type)
                 .attr('marker-end', 'url(#' + this.data.type + ')');
         }
@@ -36,11 +36,11 @@ export default class Binding {
             let source = {x: this.source.x + sourcePort.x, y: this.source.y + sourcePort.y},
                 target = {x: this.target.x + targetPort.x, y: this.target.y + targetPort.y};
 
-            let dx = target.x - source.x,
-                dy = target.y - source.y,
-                dr = Math.sqrt(dx * dx + dy * dy);
-
-            this._element.attr('d', 'M' + source.x + ',' + source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + target.x + ',' + target.y);
+            this._element
+                .attr('x1', source.x)
+                .attr('y1', source.y)
+                .attr('x2', target.x)
+                .attr('y2', target.y);
         }
 
     }
