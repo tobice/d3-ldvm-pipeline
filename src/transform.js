@@ -23,8 +23,14 @@ export default function transform(data) {
         return component;
     });
 
-    let bindings = data.bindings.map(b =>
-        new Binding(b, ports[b.sourceUri], ports[b.targetUri]));
+    let bindings = data.bindings.map(b => {
+        let binding = new Binding(b, ports[b.sourceUri], ports[b.targetUri]);
+
+        // Remember of which binding is the port member
+        binding.sourcePort.binding = binding.targetPort.binding = binding;
+
+        return binding;
+    });
 
     return {components: components, bindings: bindings};
 }

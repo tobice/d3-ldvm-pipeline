@@ -30,6 +30,9 @@ export default class Component {
             this.inputs.forEach((port) => g.append(() => this._renderInput(port)));
             this.outputs.forEach((port) => g.append(() => this._renderOutput(port)));
 
+            g.on('mouseover', () => this._hightlightGroup(true));
+            g.on('mouseout', () => this._hightlightGroup(false));
+
             this._element = g;
         }
 
@@ -50,6 +53,14 @@ export default class Component {
 
     type() {
         return this.data.type;
+    }
+
+    highlight(value) {
+        if (this._element) {
+            this._element.select('.ldvm-component-body')
+                .transition()
+                .style('fill-opacity', value ? 1 : 0.7);
+        }
     }
 
     _renderLabel() {
@@ -80,6 +91,12 @@ export default class Component {
                 .show())
             .on('mouseout', () => tooltip.hide())
             .node();
+    }
+
+    _hightlightGroup(value) {
+        this.highlight(value);
+        this.inputs.forEach(input => input.binding.source.highlight(value));
+        this.outputs.forEach(output => output.binding.target.highlight(value));
     }
 
     _renderInput(port) {
