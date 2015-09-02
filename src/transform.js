@@ -5,7 +5,7 @@ import Binding from './Binding.js'
 export default function transform(data) {
     let ports = {};
 
-    let components = data.components.map(c => {
+    let components = (data.components || []).map(c => {
         let component = new Component(c, c.inputs, c.outputs);
 
         // Remember to which component each port belongs
@@ -23,14 +23,19 @@ export default function transform(data) {
         return component;
     });
 
-    let bindings = data.bindings.map(b => {
+    let bindings = (data.bindings || []).map(b => {
+        if (!ports[b.sourceUri] || !ports[b.targetUri]) {
+            console.log("Inconsistent data: binding is trying to connect non-existent components");
+            return null;
+        }
+
         let binding = new Binding(b, ports[b.sourceUri], ports[b.targetUri]);
 
         // Remember of which binding is the port member
         binding.sourcePort.binding = binding.targetPort.binding = binding;
 
         return binding;
-    });
+    }).filter(b => b);
 
-    return {components: components, bindings: bindings};
+    return {components, bindings};
 }

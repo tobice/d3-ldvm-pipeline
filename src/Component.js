@@ -41,7 +41,7 @@ export default class Component {
 
     update() {
         if (this._element) {
-            this._element.attr('transform', 'translate(' + this.x + ',' + this.y + ')');
+            this._element.attr('transform', 'translate(' + (this.x || 0) + ',' + (this.y || 0) + ')');
         }
     }
 
